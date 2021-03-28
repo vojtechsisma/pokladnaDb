@@ -7,11 +7,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import server.db.Db;
+import server.*;
 
 public class App {
     public static void main(String[] args) {
         try {
             Registry reg = LocateRegistry.createRegistry(12345);
+            
+            reg.rebind("objednavka", new Objednavka());
             reg.rebind("polozky", new Polozky());
 
             System.out.println("Server ready");

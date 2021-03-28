@@ -1,118 +1,90 @@
+package pokladna;
+
 import javax.swing.JFrame;
-import java.awt.Color;
 
+import shared.Polozky;
 
-public class PridavkyFrame extends JFrame{
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.*;
+import java.awt.*;
+
+import shared.Objednavka;
+import shared.Polozka;
+
+public class PridavkyFrame extends JFrame {
         /**
          *
          */
         private static final long serialVersionUID = 1L;
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JButton jButton20;
-        private javax.swing.JButton jButton21;
-        //public Objednavka obj = Objednavka.getInstance();
+        // public Objednavka obj = Objednavka.getInstance();
 
-        PridavkyFrame(Objednavka obj) {
-            initPridavky(obj);
+        PridavkyFrame(Polozka p) {
+                initPridavky(p);
         }
 
         int slanina = 0;
         int syr = 0;
-        private Objednavka initPridavky(Objednavka obj) {
 
-                
-                jButton1 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
-                jButton20 = new javax.swing.JButton();
-                jButton21 = new javax.swing.JButton();
+        private void initPridavky(Polozka p) {
 
-                setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-                setResizable(false);
+                JPanel jPanel1 = new JPanel();
+                GridLayout gl = new GridLayout();
+                jPanel1.setLayout(gl);
 
-                jButton1.setText("slanina");
-                jButton1.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                slanina++;
-                                jButton1.setBackground(Color.green);
+                int i = 0;
+                Map<String, JButton> buttons = new HashMap<String, JButton>();
+                try {
+                        Polozky polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
+                        Objednavka objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
+                        for (Polozka polozka : polozky.getPridavky()) {
+                                JButton btn = new JButton();
+                                btn.setText(polozka.getNazev());
+                                btn.setPreferredSize(new Dimension(200, 100));
+                                btn.addActionListener(new java.awt.event.ActionListener() {
+                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
 
+                                                p.pridej(polozka);
+
+                                        }
+                                });
+                                jPanel1.add(btn);
+                                buttons.put(polozka.getNazev(), new JButton());
+                                i++;
                         }
-                });
 
-                jButton2.setText("syr");
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
+                } catch (MalformedURLException | RemoteException | NotBoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+
+                JButton okButton = new JButton();
+                okButton.setText("OK");
+                okButton.setPreferredSize(new Dimension(200, 100));
+                okButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                syr++;
-                                jButton2.setBackground(Color.green);
-                        }
-                });
-
-                jButton20.setText("");
-
-                jButton21.setText("ok");
-
-                jButton21.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                Iface chesseburger;
-                                if (syr > 0 && slanina > 0) {
-                                        chesseburger = new SyrDecorator(new SlaninaDecorator(new Chesseburger()));
-                                        System.err.println("jifoa");
-                                        ObjednavkaFrame.zapis(chesseburger.getNazev(), chesseburger.getCena());
-                                        syr = 0;
-
-                                } else if (slanina > 0) {
-                                        chesseburger = new SlaninaDecorator(new Chesseburger());
-                                        ObjednavkaFrame.zapis(chesseburger.getNazev(), chesseburger.getCena());
-                                        slanina = 0;
-                                } else if (syr > 0) {
-                                        chesseburger = new SyrDecorator(new Chesseburger());
-                                        ObjednavkaFrame.zapis(chesseburger.getNazev(), chesseburger.getCena());
-                                        syr = 0;
-                                } else {
-                                        chesseburger = new Chesseburger();
-                                        ObjednavkaFrame.zapis(chesseburger.getNazev(), chesseburger.getCena());
-
-                                }
-                                obj.pridej(chesseburger);
-
-                                obj.vypis();
+                                ObjednavkaFrame.zapis(p);
                                 dispose();
                         }
-                        
                 });
+                jPanel1.add(okButton);
+                gl.setRows(i + 1);
 
-                javax.swing.GroupLayout layout2 = new javax.swing.GroupLayout(getContentPane());
-                getContentPane().setLayout(layout2);
-                layout2.setHorizontalGroup(layout2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout2.createSequentialGroup().addContainerGap().addGroup(layout2
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 173,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 173,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 173,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 173,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                Short.MAX_VALUE)));
-                layout2.setVerticalGroup(layout2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout2.createSequentialGroup().addGap(12, 12, 12)
-                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 51,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 51,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 51,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                Short.MAX_VALUE)));
+                // jPanel1 = new javax.swing.JPanel();
+                add(jPanel1);
+                setMinimumSize(new Dimension(500, 400));
+                setTitle("Přídavky");
+
+                setSize(1800, 600);
+                setLocationRelativeTo(null);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 pack();
-                return(obj);
+
         }// </editor-fold>
 }
