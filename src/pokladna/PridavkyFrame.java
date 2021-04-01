@@ -16,6 +16,7 @@ import java.awt.*;
 
 import shared.Objednavka;
 import shared.Polozka;
+import shared.Pridavek;
 
 public class PridavkyFrame extends JFrame {
         /**
@@ -34,7 +35,7 @@ public class PridavkyFrame extends JFrame {
         private void initPridavky(Polozka p) {
 
                 JPanel jPanel1 = new JPanel();
-                GridLayout gl = new GridLayout();
+                java.awt.GridLayout gl = new java.awt.GridLayout();
                 jPanel1.setLayout(gl);
 
                 int i = 0;
@@ -42,14 +43,19 @@ public class PridavkyFrame extends JFrame {
                 try {
                         Polozky polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
                         Objednavka objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
-                        for (Polozka polozka : polozky.getPridavky()) {
+                        for (Pridavek polozka : polozky.getPridavky(p.getId())) {
                                 JButton btn = new JButton();
                                 btn.setText(polozka.getNazev());
                                 btn.setPreferredSize(new Dimension(200, 100));
                                 btn.addActionListener(new java.awt.event.ActionListener() {
                                         public void actionPerformed(java.awt.event.ActionEvent evt) {
 
-                                                p.pridej(polozka);
+                                                Pridavek pr = new Pridavek();
+                                                pr.setId(polozka.getId());
+                                                pr.setNazev(polozka.getNazev());
+                                                pr.setCena(polozka.getCena());
+                                                p.pridej(pr);
+                                                System.out.println(p.getNazev());
 
                                         }
                                 });

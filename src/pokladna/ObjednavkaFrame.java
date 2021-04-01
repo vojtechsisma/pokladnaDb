@@ -18,6 +18,8 @@ import java.util.Map;
 import shared.Objednavka;
 import shared.Polozka;
 import shared.Polozky;
+import shared.Pridavek;
+import shared.Uloziste;
 
 public class ObjednavkaFrame<E> extends javax.swing.JFrame {
 
@@ -46,18 +48,30 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
         // public Objednavka obj = new Objednavka();
         // public Uloziste u = Uloziste.getInstance();
         // public Uloziste u = Uloziste.getInstance();
+        private Polozky polozky;
+        private Uloziste uloziste;
+        private static Objednavka objednavka;
+        static int c = 0;
 
         private void initComponents() {
 
+                c = 0;
+                polozky = null;
+                objednavka = null;
+
                 JPanel jPanel1 = new JPanel();
-                GridLayout gl = new GridLayout();
+                java.awt.GridLayout gl = new java.awt.GridLayout();
                 jPanel1.setLayout(gl);
 
                 int i = 0;
                 Map<String, JButton> buttons = new HashMap<String, JButton>();
                 try {
-                        Polozky polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
-                        Objednavka objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
+                        polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
+                        objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
+
+                        uloziste = (Uloziste) Naming.lookup("rmi://pokladna:12345/uloziste");
+                        objednavka.obnov();
+                        objednavka.setId(polozky.getPrevId()+1);
                         for (Polozka polozka : polozky.getPolozky()) {
                                 JButton btn = new JButton();
                                 btn.setText(polozka.getNazev());
@@ -65,14 +79,13 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                                 btn.addActionListener(new java.awt.event.ActionListener() {
                                         public void actionPerformed(java.awt.event.ActionEvent evt) {
 
-                                                PridavkyFrame pridavky = new PridavkyFrame(polozka);
+                                                Polozka p = new Polozka();
+                                                p.setNazev(polozka.getNazev());
+                                                p.setCena(polozka.getCena());
+                                                p.setId(polozka.getId());
+
+                                                PridavkyFrame pridavky = new PridavkyFrame(p);
                                                 pridavky.setVisible(true);
-                                                try {
-                                                        objednavka.pridej(polozka);
-                                                } catch (RemoteException e) {
-                                                        // TODO Auto-generated catch block
-                                                        e.printStackTrace();
-                                                }
 
                                         }
                                 });
@@ -100,6 +113,9 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                 jTextArea2.setLineWrap(true);
                 jTextArea2.setWrapStyleWord(true);
 
+                jTextArea2.setText("");
+                jTextArea3.setText("");
+
                 jTextArea3.setColumns(20);
                 jTextArea3.setRows(1);
                 jTextArea3.setEditable(false);
@@ -108,6 +124,23 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                 jTextArea3.setWrapStyleWord(true);
 
                 jButton3.setText("OK");
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                                try {
+
+                                        
+                                        uloziste.pridej(objednavka);
+                                        System.out.println("xdd: " + uloziste.getObjednavka(objednavka.getId()).getId());
+                                        polozky.writeObjednavka(objednavka);
+                                        dispose();
+                                } catch (RemoteException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                }
+
+                        }
+                });
 
                 jButton4.setText("storno");
 
@@ -164,24 +197,20 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
 
         }// </editor-fold>
 
-        public void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("oojoi");
-                dispose();
-        }
-
-        public void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-
-                dispose();
-        }
-
         /**
          *
          */
-        static int c = 0;
 
         public static void zapis(Polozka polozka) {
 
-                LinkedList<Polozka> pridavky = new LinkedList<Polozka>();
+                try {
+                        objednavka.pridej(polozka);
+                } catch (RemoteException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+
+                LinkedList<Pridavek> pridavky = new LinkedList<Pridavek>();
 
                 String nazev = polozka.getNazev();
                 int cena = polozka.getCena();
@@ -189,8 +218,8 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                         pridavky.add(polozka.getPridavky(i));
                 }
 
-                jTextArea2.append(nazev + "\n\t");
-                for (Polozka pridavek : pridavky) {
+                jTextArea2.append(nazev + "\t" + polozka.getZakladniCena() + "\n\t");
+                for (Pridavek pridavek : pridavky) {
                         jTextArea2.append("+" + pridavek.getNazev() + "\t" + pridavek.getCena() + "\n\t");
                 }
                 jTextArea2.append("----\n\t" + cena + "\n");
@@ -199,11 +228,4 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                 jTextArea3.setText("Celkem: " + Integer.toString(c));
         }
 
-        public static void zapisPridavku(String nazev, int cena) {
-
-                jTextArea2.append("\t+" + nazev + "\n\t----\n\t" + cena + "\n");
-                jTextArea2.setCaretPosition(jTextArea2.getDocument().getLength());
-                c += cena;
-                jTextArea3.setText("Celkem: " + Integer.toString(c));
-        }
 }

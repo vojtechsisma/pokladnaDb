@@ -3,6 +3,7 @@ package shared;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 public interface Objednavka extends Remote {
 
@@ -21,4 +22,9 @@ public interface Objednavka extends Remote {
     public int getCelkovaCena() throws RemoteException;
     
     public void vypis() throws RemoteException;
+
+    public LinkedList<Polozka> getPolozky() throws RemoteException;
+
+    public void obnov() throws RemoteException;
+
 }

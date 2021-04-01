@@ -16,6 +16,7 @@ public class App {
             
             reg.rebind("objednavka", new Objednavka());
             reg.rebind("polozky", new Polozky());
+            reg.rebind("uloziste", new Uloziste());
 
             System.out.println("Server ready");
         } catch (RemoteException e) {
