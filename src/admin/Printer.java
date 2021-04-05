@@ -1,4 +1,4 @@
-package pokladna;
+package admin;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,6 +81,7 @@ public class Printer {
 
             fw.write("----------------------\n");
             fw.write("Celkem: " + celkovaCena);
+
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

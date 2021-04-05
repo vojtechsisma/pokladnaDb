@@ -9,6 +9,8 @@ import shared.Polozka;
 
 public class Objednavka extends UnicastRemoteObject implements shared.Objednavka {
 
+    private static final long serialVersionUID = 1L;
+
     LinkedList<Polozka> polozky = new LinkedList<Polozka>();
 
     int id;
@@ -53,7 +55,7 @@ public class Objednavka extends UnicastRemoteObject implements shared.Objednavka
 
     @Override
     public int getCelkovaCena() {
-        
+
         for (int i = 0; i < this.polozky.size(); i++) {
             celkovaCena += polozky.get(i).getCena();
         }
@@ -62,7 +64,7 @@ public class Objednavka extends UnicastRemoteObject implements shared.Objednavka
 
     @Override
     public void vypis() {
-        for (Iterator i = polozky.iterator(); i.hasNext();) {
+        for (Iterator<Polozka> i = polozky.iterator(); i.hasNext();) {
             System.out.println(i.next());
         }
     }

@@ -1,4 +1,4 @@
-package pokladna;
+package admin;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -36,12 +36,13 @@ public class VypisFrame extends javax.swing.JFrame {
         JButton jButton1 = new JButton();
         JSpinner jSpinner1 = new JSpinner();
         JLabel jLabel1 = new JLabel();
-        jSpinner1.setPreferredSize(new Dimension(50, 20));
-        jSpinner1.setValue(1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+
         setLocationRelativeTo(null);
+        jSpinner1.setPreferredSize(new Dimension(50, 20));
+        jSpinner1.setValue(1);
 
         jButton1.setText("vypsat");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -49,7 +50,6 @@ public class VypisFrame extends javax.swing.JFrame {
                 Integer cisloObj = (Integer) jSpinner1.getValue();
                 try {
                     vypis(cisloObj);
-                    dispose();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -171,6 +171,7 @@ public class VypisFrame extends javax.swing.JFrame {
 
             frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             frame.setResizable(false);
+            frame.setLocation(200, 200);
 
             area.setColumns(20);
             area.setRows(10);
@@ -201,7 +202,6 @@ public class VypisFrame extends javax.swing.JFrame {
         } catch (IndexOutOfBoundsException exc) {
             JOptionPane.showMessageDialog(this, "Taková objednávka neexistuje!!", "Chyba uživatele",
                     JOptionPane.ERROR_MESSAGE);
-            exc.printStackTrace();
             frame.dispose();
         }
 

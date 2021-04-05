@@ -20,7 +20,7 @@ public interface Objednavka extends Remote {
     public void pridej(Polozka polozka) throws RemoteException;
 
     public int getCelkovaCena() throws RemoteException;
-    
+
     public void vypis() throws RemoteException;
 
     public LinkedList<Polozka> getPolozky() throws RemoteException;

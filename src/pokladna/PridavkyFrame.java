@@ -14,16 +14,12 @@ import java.util.Map;
 import javax.swing.*;
 import java.awt.*;
 
-import shared.Objednavka;
 import shared.Polozka;
 import shared.Pridavek;
 
 public class PridavkyFrame extends JFrame {
-        /**
-         *
-         */
+
         private static final long serialVersionUID = 1L;
-        // public Objednavka obj = Objednavka.getInstance();
 
         PridavkyFrame(Polozka p) {
                 initPridavky(p);
@@ -42,7 +38,6 @@ public class PridavkyFrame extends JFrame {
                 Map<String, JButton> buttons = new HashMap<String, JButton>();
                 try {
                         Polozky polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
-                        Objednavka objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
                         for (Pridavek polozka : polozky.getPridavky(p.getId())) {
                                 JButton btn = new JButton();
                                 btn.setText(polozka.getNazev());
@@ -55,7 +50,6 @@ public class PridavkyFrame extends JFrame {
                                                 pr.setNazev(polozka.getNazev());
                                                 pr.setCena(polozka.getCena());
                                                 p.pridej(pr);
-                                                System.out.println(p.getNazev());
 
                                         }
                                 });
@@ -65,7 +59,6 @@ public class PridavkyFrame extends JFrame {
                         }
 
                 } catch (MalformedURLException | RemoteException | NotBoundException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
 
@@ -81,10 +74,11 @@ public class PridavkyFrame extends JFrame {
                 jPanel1.add(okButton);
                 gl.setRows(i + 1);
 
-                // jPanel1 = new javax.swing.JPanel();
                 add(jPanel1);
                 setMinimumSize(new Dimension(500, 400));
                 setTitle("Přídavky");
+
+                setLocationRelativeTo(null);
 
                 setSize(1800, 600);
                 setLocationRelativeTo(null);
@@ -92,5 +86,5 @@ public class PridavkyFrame extends JFrame {
 
                 pack();
 
-        }// </editor-fold>
+        }
 }

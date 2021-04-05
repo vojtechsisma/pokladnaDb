@@ -1,17 +1,19 @@
 package server;
 
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Iterator;
 import shared.Objednavka;
 
 public class Uloziste extends UnicastRemoteObject implements shared.Uloziste {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	HashMap<Integer, Objednavka> seznam = new HashMap<Integer, Objednavka>();
 
 	protected Uloziste() throws RemoteException {
@@ -71,6 +73,7 @@ public class Uloziste extends UnicastRemoteObject implements shared.Uloziste {
 
 	@Override
 	public void pridej(Objednavka objednavka) throws RemoteException {
+
 		seznam.put((Integer) objednavka.getId(), objednavka);
 
 	}

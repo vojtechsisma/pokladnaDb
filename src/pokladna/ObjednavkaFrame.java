@@ -21,7 +21,7 @@ import shared.Polozky;
 import shared.Pridavek;
 import shared.Uloziste;
 
-public class ObjednavkaFrame<E> extends javax.swing.JFrame {
+public class ObjednavkaFrame extends javax.swing.JFrame {
 
         /**
         *
@@ -60,7 +60,7 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                 objednavka = null;
 
                 JPanel jPanel1 = new JPanel();
-                java.awt.GridLayout gl = new java.awt.GridLayout();
+                GridLayout gl = new GridLayout(1, 1, 5, 5);
                 jPanel1.setLayout(gl);
 
                 int i = 0;
@@ -71,7 +71,8 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
 
                         uloziste = (Uloziste) Naming.lookup("rmi://pokladna:12345/uloziste");
                         objednavka.obnov();
-                        objednavka.setId(polozky.getPrevId()+1);
+                        setTitle("Nová objednávka id: " + (polozky.getPrevId() + 1));
+                        objednavka.setId(polozky.getPrevId() + 1);
                         for (Polozka polozka : polozky.getPolozky()) {
                                 JButton btn = new JButton();
                                 btn.setText(polozka.getNazev());
@@ -95,16 +96,13 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                         }
 
                 } catch (MalformedURLException | RemoteException | NotBoundException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
                 gl.setRows(i);
 
-                // jPanel1 = new javax.swing.JPanel();
-
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 setMinimumSize(new Dimension(550, 400));
-                setTitle("Nová objednávka");
+                setLocationRelativeTo(null);
 
                 jTextArea2.setColumns(20);
                 jTextArea2.setRows(5);
@@ -129,13 +127,10 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
 
                                 try {
 
-                                        
                                         uloziste.pridej(objednavka);
-                                        System.out.println("xdd: " + uloziste.getObjednavka(objednavka.getId()).getId());
                                         polozky.writeObjednavka(objednavka);
                                         dispose();
                                 } catch (RemoteException e) {
-                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                 }
 
@@ -143,6 +138,11 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                 });
 
                 jButton4.setText("storno");
+                jButton4.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                dispose();
+                        }
+                });
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -191,22 +191,16 @@ public class ObjednavkaFrame<E> extends javax.swing.JFrame {
                                                 .addContainerGap()));
                 setPreferredSize(new Dimension(600, 500));
                 setLocationRelativeTo(null);
-                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 pack();
 
-        }// </editor-fold>
-
-        /**
-         *
-         */
+        }
 
         public static void zapis(Polozka polozka) {
 
                 try {
                         objednavka.pridej(polozka);
                 } catch (RemoteException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
 
