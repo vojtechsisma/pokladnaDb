@@ -11,9 +11,7 @@ import java.awt.*;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import shared.Objednavka;
 import shared.Polozka;
@@ -64,7 +62,6 @@ public class ObjednavkaFrame extends javax.swing.JFrame {
                 jPanel1.setLayout(gl);
 
                 int i = 0;
-                Map<String, JButton> buttons = new HashMap<String, JButton>();
                 try {
                         polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
                         objednavka = (Objednavka) Naming.lookup("rmi://pokladna:12345/objednavka");
@@ -91,7 +88,6 @@ public class ObjednavkaFrame extends javax.swing.JFrame {
                                         }
                                 });
                                 jPanel1.add(btn);
-                                buttons.put(polozka.getNazev(), new JButton());
                                 i++;
                         }
 

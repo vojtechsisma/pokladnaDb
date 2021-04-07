@@ -53,13 +53,4 @@ public class Pridavek implements Serializable {
         this.parent = parent;
     }
 
-    public void obnov() {
-        this.id = 0;
-        this.nazev = null;
-        this.cena = 0;
-        this.mnozstvi = 0;
-        this.celkovaCena = 0;
-
-    }
-
 }

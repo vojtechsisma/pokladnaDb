@@ -541,7 +541,7 @@ public class Polozky extends UnicastRemoteObject implements shared.Polozky {
             }
             try (java.sql.PreparedStatement stmt = conn
                     .prepareStatement("DELETE FROM pridavkyvpolozce WHERE polozky_id = ?")) {
-                stmt.setInt(1, 1);
+                stmt.setInt(1, id);
                 if (stmt.executeUpdate() != 1) {
                     throw new Exception("Nepodaril se smazani polozky");
                 }

@@ -21,18 +21,7 @@ public class Db {
         Class.forName("com.mysql.jdbc.Driver");
     }
 
-    private final String typDB = "mysql";
-    private final String serverName = "localhost";
-    private final int port = 3306;
-    private final String defaultDB = "pokladna";
-
     public Connection getConnection() throws SQLException {
-        return getConnection(typDB, serverName, port, defaultDB, "root", "");
+        return DriverManager.getConnection(cs, "root", "");
     }
-
-    public Connection getConnection(String typDB, String serverName, int port, String defaultDB, String user,
-            String pass) throws SQLException {
-        return DriverManager.getConnection(cs, user, pass);
-    }
-
 }

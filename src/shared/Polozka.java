@@ -69,15 +69,4 @@ public class Polozka implements Serializable {
         pridavky.add(pridavek);
     }
 
-    public void obnov() {
-        this.pridavky = new LinkedList<Pridavek>();
-
-        this.id = 0;
-        this.nazev = null;
-        this.cena = 0;
-        this.mnozstvi = 0;
-        this.celkovaCena = 0;
-
-    }
-
 }

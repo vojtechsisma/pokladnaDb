@@ -13,7 +13,7 @@ public class App {
             reg.rebind("polozky", new Polozky());
             reg.rebind("uloziste", new Uloziste());
 
-            System.out.println("Server ready");
+            System.out.println("Server běží");
         } catch (RemoteException e) {
             e.printStackTrace();
         }

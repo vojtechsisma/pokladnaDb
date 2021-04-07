@@ -8,8 +8,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +33,6 @@ public class PridavkyFrame extends JFrame {
                 jPanel1.setLayout(gl);
 
                 int i = 0;
-                Map<String, JButton> buttons = new HashMap<String, JButton>();
                 try {
                         Polozky polozky = (Polozky) Naming.lookup("rmi://pokladna:12345/polozky");
                         for (Pridavek polozka : polozky.getPridavky(p.getId())) {
@@ -54,7 +51,6 @@ public class PridavkyFrame extends JFrame {
                                         }
                                 });
                                 jPanel1.add(btn);
-                                buttons.put(polozka.getNazev(), new JButton());
                                 i++;
                         }
 

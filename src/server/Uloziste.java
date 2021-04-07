@@ -45,8 +45,6 @@ public class Uloziste extends UnicastRemoteObject implements shared.Uloziste {
 
 	}
 
-	static Uloziste instance = null;
-
 	@Override
 	public int getPocet() throws RemoteException {
 		return this.seznam.size();
@@ -57,18 +55,9 @@ public class Uloziste extends UnicastRemoteObject implements shared.Uloziste {
 		return seznam.get(index);
 	}
 
-	public int counter = 0;
-
 	@Override
 	public void odeber(int id) throws RemoteException {
 		seznam.remove(id);
-	}
-
-	public static Uloziste getInstance() throws RemoteException {
-		if (instance == null) {
-			instance = new Uloziste();
-		}
-		return instance;
 	}
 
 	@Override
